@@ -1,19 +1,26 @@
 pragma solidity ^0.5.0;
 
 contract DStorage {
-  // Name
-  // Number of files
-  // Mapping fileId=>Struct 
+    string public name = "DStorage";
 
-  // Struct
+    mapping(uint256 => File) public files;
 
+    struct File {
+        uint256 fileId;
+        string fileHash;
+        uint256 fileSize;
+        string fileType;
+        string fileName;
+        string fileDescription;
+        uint256 uploadTime;
+        address payable uploader;
+    }
 
-  // Event
+    // Event
 
-  constructor() public {
-  }
+    constructor() public {}
 
-  // Upload File function
+    // Upload File function
 
     // Make sure the file hash exists
 
@@ -27,11 +34,9 @@ contract DStorage {
 
     // Make sure file size is more than 0
 
-
     // Increment file id
 
     // Add File to the contract
 
     // Trigger an event
-
 }
