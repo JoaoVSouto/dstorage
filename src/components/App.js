@@ -1,87 +1,62 @@
 //import DStorage from '../abis/DStorage.json'
-import React, { Component } from 'react';
-import Navbar from './Navbar'
-import Main from './Main'
+import * as React from 'react';
 import Web3 from 'web3';
+
+import { Navbar } from './Navbar';
+import { Main } from './Main';
+
 import './App.css';
 
 //Declare IPFS
 
-class App extends Component {
+export function App() {
+  const [account, setAccount] = React.useState({});
+  const [loading, setLoading] = React.useState(false);
+  const [files, setFiles] = React.useState([]);
 
-  async componentWillMount() {
-    await this.loadWeb3()
-    await this.loadBlockchainData()
-  }
-
-  async loadWeb3() {
+  async function loadWeb3() {
     //Setting up Web3
   }
 
-  async loadBlockchainData() {
+  async function loadBlockchainData() {
     //Declare Web3
-
     //Load account
-
     //Network ID
-
     //IF got connection, get data from contracts
-      //Assign contract
-
-      //Get files amount
-
-      //Load files&sort by the newest
-
+    //Assign contract
+    //Get files amount
+    //Load files&sort by the newest
     //Else
-      //alert Error
-
+    //alert Error
   }
+
+  React.useEffect(() => {
+    loadWeb3().then(() => loadBlockchainData());
+  }, []);
 
   // Get file from user
-  captureFile = event => {
-  }
-
+  function captureFile(event) {}
 
   //Upload File
-  uploadFile = description => {
-
+  function uploadFile(description) {
     //Add file to the IPFS
-
-      //Check If error
-        //Return error
-
-      //Set state to loading
-
-      //Assign value for the file without extension
-
-      //Call smart contract uploadFile function 
-
+    //Check If error
+    //Return error
+    //Set state to loading
+    //Assign value for the file without extension
+    //Call smart contract uploadFile function
   }
 
-  //Set states
-  constructor(props) {
-    super(props)
-    this.state = {
-    }
-
-    //Bind functions
-  }
-
-  render() {
-    return (
-      <div>
-        <Navbar account={this.state.account} />
-        { this.state.loading
-          ? <div id="loader" className="text-center mt-5"><p>Loading...</p></div>
-          : <Main
-              files={this.state.files}
-              captureFile={this.captureFile}
-              uploadFile={this.uploadFile}
-            />
-        }
-      </div>
-    );
-  }
+  return (
+    <div>
+      <Navbar account={account} />
+      {loading ? (
+        <div id="loader" className="text-center mt-5">
+          <p>Loading...</p>
+        </div>
+      ) : (
+        <Main files={files} captureFile={captureFile} uploadFile={uploadFile} />
+      )}
+    </div>
+  );
 }
-
-export default App;
