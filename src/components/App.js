@@ -10,14 +10,14 @@ import './App.css';
 //Declare IPFS
 
 export function App() {
-  const [account, setAccount] = React.useState({});
+  const [account, setAccount] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const [files, setFiles] = React.useState([]);
 
   async function loadWeb3() {
     if (window.ethereum) {
       window.web3 = new Web3(window.ethereum);
-      await window.ethereum.enable();
+      await window.web3.eth.requestAccounts();
     } else if (window.web3) {
       window.web3 = new Web3(window.web3.currentProvider);
     } else {
@@ -29,8 +29,9 @@ export function App() {
 
   async function loadBlockchainData() {
     const { web3 } = window;
-    console.log(web3);
-    //Load account
+
+    const [accountAddress] = await web3.eth.getAccounts();
+    setAccount(accountAddress);
     //Network ID
     //IF got connection, get data from contracts
     //Assign contract
