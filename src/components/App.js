@@ -15,11 +15,21 @@ export function App() {
   const [files, setFiles] = React.useState([]);
 
   async function loadWeb3() {
-    //Setting up Web3
+    if (window.ethereum) {
+      window.web3 = new Web3(window.ethereum);
+      await window.ethereum.enable();
+    } else if (window.web3) {
+      window.web3 = new Web3(window.web3.currentProvider);
+    } else {
+      window.alert(
+        'Non-Ethereum browser detected. You should consider trying MetaMask!'
+      );
+    }
   }
 
   async function loadBlockchainData() {
-    //Declare Web3
+    const { web3 } = window;
+    console.log(web3);
     //Load account
     //Network ID
     //IF got connection, get data from contracts
