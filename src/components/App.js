@@ -1,9 +1,10 @@
-//import DStorage from '../abis/DStorage.json'
 import * as React from 'react';
 import Web3 from 'web3';
 
 import { Navbar } from './Navbar';
 import { Main } from './Main';
+
+import DStorage from '../abis/DStorage.json';
 
 import './App.css';
 
@@ -13,6 +14,8 @@ export function App() {
   const [account, setAccount] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const [files, setFiles] = React.useState([]);
+  const [dStorageContract, setDStorageContract] = React.useState(null);
+  const [filesCount, setFilesCount] = React.useState(0);
 
   async function loadWeb3() {
     if (window.ethereum) {
@@ -32,13 +35,24 @@ export function App() {
 
     const [accountAddress] = await web3.eth.getAccounts();
     setAccount(accountAddress);
-    //Network ID
-    //IF got connection, get data from contracts
-    //Assign contract
-    //Get files amount
-    //Load files&sort by the newest
-    //Else
-    //alert Error
+
+    const networkId = await web3.eth.net.getId();
+    const networkData = DStorage.networks[networkId];
+
+    if (networkData) {
+      const dStorage = new web3.eth.Contract(DStorage.abi, networkData.address);
+      setDStorageContract(dStorage);
+
+      const incomingFilesCount = await dStorage.methods.fileCount().call();
+      setFilesCount(incomingFilesCount);
+
+      for (let i = incomingFilesCount; i >= 1; i--) {
+        const file = await dStorage.methods.files(i).call();
+        setFiles(state => [...state, file]);
+      }
+    } else {
+      window.alert('DStorage contract not deployed to detected network.');
+    }
   }
 
   React.useEffect(() => {
