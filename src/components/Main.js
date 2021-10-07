@@ -2,7 +2,15 @@ import * as React from 'react';
 import { convertBytes } from './helpers';
 import moment from 'moment';
 
-export function Main() {
+export function Main({ captureFile, uploadFile }) {
+  const [fileDescription, setFileDescription] = React.useState('');
+
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    uploadFile(fileDescription);
+    setFileDescription('');
+  }
+
   return (
     <div className="container-fluid mt-5 text-center">
       <div className="row">
@@ -13,9 +21,40 @@ export function Main() {
         >
           <div className="content">
             <p>&nbsp;</p>
-            <h1>DStorage starter_code</h1>
-            {/* Creatining uploading card ... */}
-            {/* Uploading file... */}
+
+            <div
+              className="card mb-3 mx-auto bg-dark"
+              style={{ maxWidth: '512px' }}
+            >
+              <h2 className="text-white text-monospace bg-dark">
+                <strong>
+                  <ins>Share file</ins>
+                </strong>
+              </h2>
+
+              <form onChange={handleFormSubmit}>
+                <div className="form-group">
+                  <input
+                    type="text"
+                    className="form-control text-monospace"
+                    placeholder="File description"
+                    required
+                    value={fileDescription}
+                    onChange={e => setFileDescription(e.target.value)}
+                  />
+                </div>
+                <input
+                  type="file"
+                  onChange={captureFile}
+                  className="form-control-file text-monospace"
+                  required
+                />
+                <button type="submit" className="btn-primary btn-block">
+                  <strong>Upload!</strong>
+                </button>
+              </form>
+            </div>
+
             <p>&nbsp;</p>
             {/* Create Table*/}
             <table

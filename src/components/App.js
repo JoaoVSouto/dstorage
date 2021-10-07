@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Web3 from 'web3';
+import ipfsClient from 'ipfs-http-client';
 
 import { Navbar } from './Navbar';
 import { Main } from './Main';
@@ -8,7 +9,11 @@ import DStorage from '../abis/DStorage.json';
 
 import './App.css';
 
-//Declare IPFS
+const ipfs = ipfsClient({
+  host: 'ipfs.infura.io',
+  port: 5001,
+  protocol: 'https',
+});
 
 export function App() {
   const [account, setAccount] = React.useState('');
