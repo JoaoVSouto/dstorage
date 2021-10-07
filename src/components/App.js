@@ -88,14 +88,31 @@ export function App() {
     }
 
     ipfs.add(buffer, (err, result) => {
-      console.log(result);
-    });
+      if (err) {
+        console.error('Error while uploading to IPFS', err);
+        return;
+      }
 
-    //Check If error
-    //Return error
-    //Set state to loading
-    //Assign value for the file without extension
-    //Call smart contract uploadFile function
+      if (!dStorageContract) {
+        return;
+      }
+
+      setLoading(true);
+
+      const fileType = type === '' ? 'none' : type;
+
+      dStorageContract.methods
+        .uploadFile(result[0].hash, result[0].size, fileType, name, description)
+        .send({ from: account })
+        .on('transactionHash', () => {
+          setLoading(false);
+          window.location.reload();
+        })
+        .on('error', e => {
+          window.alert(e);
+          setLoading(false);
+        });
+    });
   }
 
   return (
