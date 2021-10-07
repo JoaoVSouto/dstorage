@@ -21,6 +21,9 @@ export function App() {
   const [files, setFiles] = React.useState([]);
   const [dStorageContract, setDStorageContract] = React.useState(null);
   const [filesCount, setFilesCount] = React.useState(0);
+  const [buffer, setBuffer] = React.useState(null);
+  const [type, setType] = React.useState('');
+  const [name, setName] = React.useState('');
 
   async function loadWeb3() {
     if (window.ethereum) {
@@ -65,7 +68,20 @@ export function App() {
   }, []);
 
   // Get file from user
-  function captureFile(event) {}
+  function captureFile(event) {
+    event.preventDefault();
+
+    const [file] = event.target.files;
+    const reader = new window.FileReader();
+
+    reader.readAsArrayBuffer(file);
+
+    reader.onloadend = () => {
+      setBuffer(Buffer(reader.result));
+      setType(file.type);
+      setName(file.name);
+    };
+  }
 
   //Upload File
   function uploadFile(description) {
