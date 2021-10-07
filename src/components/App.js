@@ -87,6 +87,8 @@ export function App() {
       return;
     }
 
+    setLoading(true);
+
     ipfs.add(buffer, (err, result) => {
       if (err) {
         console.error('Error while uploading to IPFS', err);
@@ -96,8 +98,6 @@ export function App() {
       if (!dStorageContract) {
         return;
       }
-
-      setLoading(true);
 
       const fileType = type === '' ? 'none' : type;
 
@@ -123,7 +123,12 @@ export function App() {
           <p>Loading...</p>
         </div>
       ) : (
-        <Main files={files} captureFile={captureFile} uploadFile={uploadFile} />
+        <Main
+          files={files}
+          fileCount={filesCount}
+          captureFile={captureFile}
+          uploadFile={uploadFile}
+        />
       )}
     </div>
   );

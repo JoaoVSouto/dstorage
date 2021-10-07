@@ -2,7 +2,7 @@ import * as React from 'react';
 import { convertBytes } from './helpers';
 import moment from 'moment';
 
-export function Main({ captureFile, uploadFile }) {
+export function Main({ files, fileCount, captureFile, uploadFile }) {
   const [fileDescription, setFileDescription] = React.useState('');
 
   function handleFormSubmit(e) {
@@ -56,13 +56,76 @@ export function Main({ captureFile, uploadFile }) {
             </div>
 
             <p>&nbsp;</p>
-            {/* Create Table*/}
+
+            <p className="text-monospace text-left mb-1">
+              File count: {fileCount}
+            </p>
+
             <table
               className="table-sm table-bordered text-monospace"
               style={{ width: '1000px', maxHeight: '450px' }}
             >
-              {/* Set table columns */}
-              {/* Mapping rows... */}
+              <thead style={{ fontSize: '15px' }}>
+                <tr className="bg-dark text-white">
+                  <th scope="col" style={{ width: '10px' }}>
+                    id
+                  </th>
+                  <th scope="col" style={{ width: '200px' }}>
+                    name
+                  </th>
+                  <th scope="col" style={{ width: '230px' }}>
+                    description
+                  </th>
+                  <th scope="col" style={{ width: '120px' }}>
+                    type
+                  </th>
+                  <th scope="col" style={{ width: '90px' }}>
+                    size
+                  </th>
+                  <th scope="col" style={{ width: '90px' }}>
+                    date
+                  </th>
+                  <th scope="col" style={{ width: '120px' }}>
+                    uploader/view
+                  </th>
+                  <th scope="col" style={{ width: '120px' }}>
+                    hash/view/get
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {files.map(file => (
+                  <tr key={file.fileId}>
+                    <td>{file.fileId}</td>
+                    <td>{file.fileName}</td>
+                    <td>{file.fileDescription}</td>
+                    <td>{file.fileType}</td>
+                    <td>{convertBytes(file.fileSize)}</td>
+                    <td>
+                      {moment.unix(file.uploadTime).format('h:mm:ss A M/D/Y')}
+                    </td>
+                    <td>
+                      <a
+                        href={`https://etherscan.io/address/${file.uploader}`}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        {file.uploader.substring(0, 10)}...
+                      </a>
+                    </td>
+                    <td>
+                      <a
+                        href={`https://ipfs.infura.io/ipfs/${file.fileHash}`}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        {file.fileHash.substring(0, 10)}...
+                      </a>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </div>
         </main>
