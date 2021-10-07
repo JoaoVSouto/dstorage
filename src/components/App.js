@@ -67,7 +67,6 @@ export function App() {
     loadWeb3().then(() => loadBlockchainData());
   }, []);
 
-  // Get file from user
   function captureFile(event) {
     event.preventDefault();
 
@@ -83,9 +82,15 @@ export function App() {
     };
   }
 
-  //Upload File
   function uploadFile(description) {
-    //Add file to the IPFS
+    if (!buffer) {
+      return;
+    }
+
+    ipfs.add(buffer, (err, result) => {
+      console.log(result);
+    });
+
     //Check If error
     //Return error
     //Set state to loading

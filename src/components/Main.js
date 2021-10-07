@@ -32,7 +32,7 @@ export function Main({ captureFile, uploadFile }) {
                 </strong>
               </h2>
 
-              <form onChange={handleFormSubmit}>
+              <form onSubmit={handleFormSubmit}>
                 <div className="form-group">
                   <input
                     type="text"
